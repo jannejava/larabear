@@ -20,6 +20,11 @@ class Note extends Model
         static::addGlobalScope(new TrashedScope);
     }
 
+    public function getIdAttribute()
+    {
+        return $this->Z_PK;
+    }
+
     public function getTitleAttribute()
     {
         return $this->ZTITLE;
@@ -47,6 +52,11 @@ class Note extends Model
     public function updatedAt()
     {
         return $this->convertToCarbon($this->ZMODIFICATIONDATE);
+    }
+
+    public function scopeWhereId($query, $id)
+    {
+        return $query->where('Z_PK', $id);
     }
 
     public function scopeWhereCreatedSince($query, $date)
