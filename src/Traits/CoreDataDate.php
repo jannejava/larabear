@@ -3,6 +3,7 @@
 namespace Eastwest\Larabear\Traits;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 trait CoreDataDate
 {
@@ -15,14 +16,24 @@ trait CoreDataDate
      */
     public function convertToCarbon($coreDataDate)
     {
-        return Carbon::createFromTimestampUTC($coreDataDate)
+        try {
+            return Carbon::createFromTimestampUTC($coreDataDate)
                 ->addYear(31);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return;
+        }
     }
 
     public function convertToCoreData($dateString)
     {
-        return Carbon::parse($dateString)
+        try {
+            return Carbon::parse($dateString)
                 ->subYear(31)
                 ->timestamp;
+        } catch (\Exception $e) {
+            Log::error($e);
+            return;
+        }
     }
 }
